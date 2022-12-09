@@ -3,16 +3,16 @@
 use yii\db\Migration;
 
 /**
- * Handles the creation of table `{{%country}}`.
+ * Handles the creation of table `{{%city}}`.
  */
-class m221209_103109_create_country_table extends Migration
+class m221209_115012_create_city_table extends Migration
 {
     /**
      * {@inheritdoc}
      */
     public function safeUp()
     {
-        $this->createTable('{{%country}}', [
+        $this->createTable('{{%city}}', [
             'id' => $this->primaryKey(),
             'name' => $this->string()->notNull(),
         ]);
@@ -23,6 +23,6 @@ class m221209_103109_create_country_table extends Migration
      */
     public function safeDown()
     {
-        $this->dropTable('{{%country}}');
+        $this->dropTable('{{%city}}');
     }
 }
