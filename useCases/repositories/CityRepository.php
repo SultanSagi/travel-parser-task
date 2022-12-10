@@ -4,6 +4,7 @@ namespace app\useCases\repositories;
 
 use Yii;
 use yii\db\Query;
+use Exception;
 
 class CityRepository
 {
@@ -19,6 +20,14 @@ class CityRepository
         return $query;
     }
 
+    public function get(string $pki): array
+    {
+        if(!$city = (new Query)->from($this->table)->where(['pki' => $pki])->one()) {
+            throw new Exception('City is not found.');
+        }
+        return $city;
+    }
+    
     public function existsByPki(string $id): bool
     {
         return (new Query)->from($this->table)->where(['pki' => (int)$id])->exists();
@@ -26,8 +35,7 @@ class CityRepository
 
     public function update(int $pki, string $name, int $sort)
     {
-        Yii::$app->db->createCommand("UPDATE :table SET name=:name, sort=:sort WHERE pki=:pki")
-            ->bindValue(':table', $this->table)
+        Yii::$app->db->createCommand("UPDATE city SET name=:name, sort=:sort WHERE pki=:pki")
             ->bindValue(':name', $name)
             ->bindValue(':sort', $sort)
             ->bindValue(':pki', $pki)
