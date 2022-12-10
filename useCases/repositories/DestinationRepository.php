@@ -2,6 +2,7 @@
 
 namespace app\useCases\repositories;
 
+use app\models\DestinationForm;
 use Yii;
 use yii\db\Query;
 
@@ -37,15 +38,26 @@ class DestinationRepository
             ->execute();
     }
 
-    public function create(int $price, string $cur, array $days, array $defaultDate, string $countryId, string $cityId)
+    public function create(DestinationForm $dest, string $countryId, string $cityId)
     {
         Yii::$app->db->createCommand()->insert($this->table, [
             'country_id' => $countryId,
             'city_id' => $cityId,
-            'price' => $price,
-            'cur' => $cur,
-            'days' => serialize($days),
-            'defaultDate' => serialize($defaultDate),
+            'price' => $dest->price,
+            'cur' => $dest->cur,
+            'days' => serialize($dest->days),
+            'defaultDate' => serialize($dest->defaultDate),
         ])->execute();
     }
+    // public function create(int $price, string $cur, array $days, array $defaultDate, string $countryId, string $cityId)
+    // {
+    //     Yii::$app->db->createCommand()->insert($this->table, [
+    //         'country_id' => $countryId,
+    //         'city_id' => $cityId,
+    //         'price' => $price,
+    //         'cur' => $cur,
+    //         'days' => serialize($days),
+    //         'defaultDate' => serialize($defaultDate),
+    //     ])->execute();
+    // }
 }

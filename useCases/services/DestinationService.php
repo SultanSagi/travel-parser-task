@@ -2,6 +2,7 @@
 
 namespace app\useCases\services;
 
+use app\models\DestinationForm;
 use app\useCases\repositories\CityRepository;
 use app\useCases\repositories\CountryRepository;
 use app\useCases\repositories\DestinationRepository;
@@ -22,6 +23,12 @@ class DestinationService
     public function getAll(): array
     {
         return $this->destinations->getAll();
+    }
+
+    public function create(DestinationForm $dest) {
+        $city = $this->cities->get($dest->cityPki);
+        $country = $this->countries->get($dest->countryPki);
+        $this->destinations->create($dest, $country['id'], $city['id']);
     }
 
     public function import(array $destinations): void
