@@ -17,4 +17,15 @@ class CountryService
     {
         return $this->countries->getAll();
     }
+
+    public function import(array $countries): void
+    {
+        foreach ($countries as $pki => $country) {
+            if ($this->countries->existsByPki($pki)) {
+                $this->countries->update($pki, $country['name'], $country['sort']);
+            } else {
+                $this->countries->create($pki, $country['name'], $country['sort']);
+            }
+        }
+    }
 }

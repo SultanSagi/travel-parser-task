@@ -18,13 +18,13 @@ class CityService
         return $this->cities->getAll();
     }
 
-    public function import(array $cities)
+    public function import(array $cities): void
     {
-        foreach ($cities as $ski => $city) {
-            if ($this->cities->existsByPki($ski)) {
-                $this->cities->update($ski, $city['name'], $city['sort']);
+        foreach ($cities as $pki => $city) {
+            if ($this->cities->existsByPki($pki)) {
+                $this->cities->update($pki, $city['name'], $city['sort']);
             } else {
-                $this->cities->create($ski, $city['name'], $city['sort']);
+                $this->cities->create($pki, $city['name'], $city['sort']);
             }
         }
     }
