@@ -5,10 +5,9 @@ namespace app\controllers;
 use yii\rest\Controller;
 use api\providers\MapDataProvider;
 use app\useCases\services\CountryService;
-use yii\data\ActiveDataProvider;
-use yii\debug\models\timeline\DataProvider;
+use yii\db\Query;
 
-class CountryController extends Controller
+class DestinationController extends Controller
 {
     private $service;
 
@@ -29,18 +28,19 @@ class CountryController extends Controller
      */
     public function actionIndex()
     {
-        // $countries = (new \yii\db\Query())
-        //     ->select(['id', 'name'])
-        //     ->from('country')
-        //     ->all();
+        $destinations = (new Query())
+            ->select(['city.pki AS city_pki', 'country.pki AS country_pki', 'price', 'cur', 'days', 'defaultDate'])
+            ->from('destination')
+            ->join('LEFT JOIN', 'city', 'city.id = destination.city_id')
+            ->join('LEFT JOIN', 'country', 'country.id = destination.country_id')
+            ->indexBy('city_pki')
+            ->limit(5)
+            ->all();
         // return new ActiveDataProvider([
         //     'query' => $countries,
         // ]);
-        // echo '<pre>';
-        // die(var_dump($countries));
-        return $this->service->getAll();
-
-        // $dataProvider = $this->service->getAll();
-        // return new DataProvider($dataProvider);
+        return $destinations;
+        echo '<pre>';
+        die(var_dump($destinations));
     }
 }

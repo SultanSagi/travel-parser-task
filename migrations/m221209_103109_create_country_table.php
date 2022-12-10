@@ -15,6 +15,8 @@ class m221209_103109_create_country_table extends Migration
         $this->createTable('{{%country}}', [
             'id' => $this->primaryKey(),
             'name' => $this->string()->notNull(),
+            'pki' => $this->integer()->notNull(),
+            'sort' => $this->integer(),
         ]);
     }
 

@@ -15,6 +15,10 @@ class m221209_122025_create_destination_table extends Migration
         $this->createTable('{{%destination}}', [
             'country_id' => $this->integer()->notNull(),
             'city_id' => $this->integer()->notNull(),
+            'price' => $this->integer()->notNull(),
+            'cur' => $this->string(),
+            'days' => $this->string(300),
+            'defautDate' => $this->string(300),
         ]);
 
         $this->addPrimaryKey('{{%pk-destination}}', '{{%destination}}', ['country_id', 'city_id']);
