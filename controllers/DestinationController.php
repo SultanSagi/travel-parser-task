@@ -3,9 +3,7 @@
 namespace app\controllers;
 
 use yii\rest\Controller;
-use api\providers\MapDataProvider;
-use app\useCases\services\CountryService;
-use yii\db\Query;
+use app\useCases\services\DestinationService;
 
 class DestinationController extends Controller
 {
@@ -14,7 +12,7 @@ class DestinationController extends Controller
     public function __construct(
         $id,
         $module,
-        CountryService $service,
+        DestinationService $service,
         $config = []
     ) {
         parent::__construct($id, $module, $config);
@@ -28,19 +26,21 @@ class DestinationController extends Controller
      */
     public function actionIndex()
     {
-        $destinations = (new Query())
-            ->select(['city.pki AS city_pki', 'country.pki AS country_pki', 'price', 'cur', 'days', 'defaultDate'])
-            ->from('destination')
-            ->join('LEFT JOIN', 'city', 'city.id = destination.city_id')
-            ->join('LEFT JOIN', 'country', 'country.id = destination.country_id')
-            ->indexBy('city_pki')
-            ->limit(5)
-            ->all();
-        // return new ActiveDataProvider([
-        //     'query' => $countries,
-        // ]);
-        return $destinations;
-        echo '<pre>';
-        die(var_dump($destinations));
+        $destinations = $this->service->getAll();
+        return $this->serializeListItem($destinations);
+    }
+
+    private function serializeListItem($list): array
+    {
+        return array_map(function ($dest) {
+            return [
+                'price' => (int)$dest['price'],
+                'cur' => $dest['cur'],
+                'city_pki' => $dest['city_pki'],
+                'country_pki' => $dest['country_pki'],
+                'days' => unserialize($dest['days']),
+                'defaultDate' => unserialize($dest['defaultDate']),
+            ];
+        }, $list);
     }
 }

@@ -13,14 +13,17 @@ class DestinationRepository
     {
         return (new Query)->from($this->table)->where(['country_id' => (int)$countryId, 'city_id' => (int)$cityId])->exists();
     }
-    // public function getAll(): array
-    // {
-    //     $query = (new Query())
-    //         ->select(['id', 'name'])
-    //         ->from('country')
-    //         ->getAll();
-    //     return $query;
-    // }
+
+    public function getAll(): array
+    {
+        $query = (new Query())
+            ->select(['city.pki AS city_pki', 'country.pki AS country_pki', 'price', 'cur', 'days', 'defaultDate'])
+            ->from($this->table)
+            ->join('LEFT JOIN', 'city', 'city.id = destination.city_id')
+            ->join('LEFT JOIN', 'country', 'country.id = destination.country_id')
+            ->all();;
+        return $query;
+    }
 
     public function update(int $price, string $cur, array $days, array $defaultDate, string $countryId, string $cityId)
     {

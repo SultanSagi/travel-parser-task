@@ -19,6 +19,11 @@ class DestinationService
         $this->destinations = $destinations;
     }
 
+    public function getAll(): array
+    {
+        return $this->destinations->getAll();
+    }
+
     public function import(array $destinations): void
     {
         foreach ($destinations as $cityPki => $countries) {
