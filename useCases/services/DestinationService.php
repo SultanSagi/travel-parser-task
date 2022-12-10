@@ -42,7 +42,12 @@ class DestinationService
                 if ($this->destinations->exists($country['id'], $city['id'])) {
                     $this->destinations->update($dest['price'], $dest['cur'], $dest['days'], $dest['defaultDate'], $country['id'], $city['id']);
                 } else {
-                    $this->destinations->create($dest['price'], $dest['cur'], $dest['days'], $dest['defaultDate'], $country['id'], $city['id']);
+                    $form = new DestinationForm();
+                    $form->price = $dest['price'];
+                    $form->cur = $dest['cur'];
+                    $form->days = $dest['days'];
+                    $form->defaultDate = $dest['defaultDate'];
+                    $this->destinations->create($form, $country['id'], $city['id']);
                 }
             }
         }

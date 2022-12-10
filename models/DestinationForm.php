@@ -19,9 +19,10 @@ class DestinationForm extends Model
     public function rules()
     {
         return [
-            [['price', 'cur', 'cityPki', 'countryPki'], 'required'],
+            [['price', 'cur', 'cityPki', 'countryPki', 'days', 'defaultDate'], 'required'],
             [['price'], 'integer'],
             [['cur'], 'string'],
+            [['defaultDate'], 'checkIsArray'],
             ['cityPki', 'validateCity'],
             ['countryPki', 'validateCountry'],
             [['cityPki', 'countryPki'], 'validateDestination'],
@@ -55,6 +56,16 @@ class DestinationForm extends Model
 
         if ($dest->exists($country['id'], $city['id'])) {
             $this->addError('cityPki', 'This direction already exist');
+        }
+    }
+
+    public function checkIsArray($attribute, $params)
+    {
+        if (empty($this->defaultDate)) {
+            $this->addError($attribute, "{$attribute} cannot be empty");
+        }
+        elseif (!is_array($this->defaultDate)) {
+            $this->addError($attribute, "{$attribute} must be array.");
         }
     }
 }
